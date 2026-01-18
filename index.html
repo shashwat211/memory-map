@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Our Memory Map</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+    <style>
+        /* 1. Basic Page Reset */
+        body { margin: 0; padding: 0; font-family: sans-serif; }
+        
+        /* 2. Map Container */
+        #map { height: 100vh; width: 100%; }
+
+        /* 3. Style for the Popup Card (The white box that opens) */
+        .custom-popup .leaflet-popup-content-wrapper {
+            border-radius: 12px;
+            padding: 0;
+            overflow: hidden;
+            box-shadow: 0 3px 14px rgba(0,0,0,0.4);
+        }
+        .custom-popup .leaflet-popup-content {
+            margin: 0;
+            width: 300px !important;
+        }
+        
+        /* 4. Style for the Photo inside the popup */
+        .popup-photo {
+            width: 100%;
+            height: 200px; /* Fixed height for consistency */
+            object-fit: cover; /* Crops image nicely to fit box */
+            display: block;
+        }
+
+        /* 5. Style for the Text inside the popup */
+        .popup-text-container {
+            padding: 16px;
+            background: #fff;
+        }
+        .popup-from {
+            font-weight: bold;
+            color: #2c3e50;
+            font-size: 14px;
+            margin-bottom: 4px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .popup-message {
+            font-size: 15px;
+            color: #555;
+            line-height: 1.5;
+        }
+
+        /* 6. Style for the Emoji Marker on the map */
+        .emoji-icon {
+            background: none;
+            border: none;
+            font-size: 30px; /* Size of the emoji */
+            text-align: center;
+            line-height: 1;
+            text-shadow: 0 2px 5px rgba(0,0,0,0.3); /* Slight shadow to make it pop */
+        }
+    </style>
+</head>
+<body>
+
+    <div id="map"></div>
+
+    <script>
+        // --- STEP 1: INITIALIZE MAP ---
+        // Coordinates [Lat, Lng], Zoom Level (2 is world view, 13 is city view)
+        var map = L.map('map').setView([20.0, 0.0], 2);
+
+        // --- STEP 2: LOAD MAP TILES (Appearance) ---
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            maxZoom: 19,
+            attribution: '© OpenStreetMap'
+        }).addTo(map);
+
+        // --- STEP 3: YOUR DATA LIST ---
+        // Edit this list to add your own people, places, and photos.
+        var memories = [
+            {
+                lat: 48.8566, 
+                lng: 2.3522, 
+                name: "Alice", 
+                message: "Picnic under the trees. Best baguette ever!", 
+                photo: "photo1.jpg", // Make sure this file exists in your folder
+                icon: "🌲" 
+            },
+            {
+                lat: 35.6762, 
+                lng: 139.6503, 
+                name: "Bob", 
+                message: "Swimming at the hotel pool in Tokyo!", 
+                photo: "photo2.jpg",
+                icon: "🏊"
+            },
+            {
+                lat: 36.1699, 
+                lng: -115.1398, 
+                name: "Charlie", 
+                message: "Hiking Red Rock Canyon. It was so hot!", 
+                photo: "photo3.jpg",
+                icon: "🥾"
+            },
+            {
+                lat: -33.8688, 
+                lng: 151.2093, 
+                name: "Sarah", 
+                message: "Cheers from the Sydney Opera House bar!", 
+                photo: "photo4.jpg",
+                icon: "🍺"
+            }
+        ];
+
+        // --- STEP 4: GENERATE MARKERS ---
+        memories.forEach(function(item) {
+            
+            // A. Create the Emoji Icon
+            var emojiIcon = L.divIcon({
+                className: 'emoji-icon',
+                html: item.icon,
+                iconSize: [30, 30],
+                iconAnchor: [15, 15] // Centers the emoji on the coordinates
+            });
+
+            // B. Create the Popup HTML
+            var popupContent = `
+                <div>
+                    <img src="${item.photo}" class="popup-photo" alt="Memory">
+                    <div class="popup-text-container">
+                        <div class="popup-from">Msg from ${item.name}</div>
+                        <div class="popup-message">"${item.message}"</div>
+                    </div>
+                </div>
+            `;
+
+            // C. Add to Map
+            L.marker([item.lat, item.lng], { icon: emojiIcon })
+                .addTo(map)
+                .bindPopup(popupContent, {
+                    className: 'custom-popup', // Uses our custom CSS
+                    closeButton: false         // Hides the default 'x' button for a cleaner look
+                });
+        });
+
+    </script>
+</body>
+</html>

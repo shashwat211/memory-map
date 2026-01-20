@@ -31,12 +31,17 @@
             border-radius: 20px; box-shadow: 0 0 50px rgba(108, 92, 231, 0.3);
         }
         .intro-label { color: white; font-family: 'Fredoka One'; font-size: 1.5rem; margin-top: 15px; text-align: center; }
+        
+        /* SKIP BUTTON */
         .skip-btn {
-            position: absolute; top: 20px; right: 20px;
-            background: rgba(255,255,255,0.2); color: white;
-            border: 1px solid white; padding: 10px 20px; border-radius: 30px;
-            cursor: pointer; z-index: 3001; font-size: 0.9rem;
+            position: absolute; top: 30px; right: 30px;
+            background: rgba(255, 255, 255, 0.2); color: white;
+            border: 2px solid white; padding: 10px 25px; border-radius: 30px;
+            cursor: pointer; z-index: 3001;
+            font-size: 1rem; font-weight: 600;
+            backdrop-filter: blur(5px); transition: all 0.3s;
         }
+        .skip-btn:hover { background: rgba(255,255,255,0.4); transform: scale(1.05); }
 
         /* CARD STYLES */
         .big-title { color: white; font-family: 'Fredoka One'; font-size: 2.5rem; text-align: center; line-height: 1.2; padding: 0 10px; text-shadow: 0 5px 15px rgba(0,0,0,0.5); }
@@ -87,7 +92,9 @@
             background: #2d3436; color: white; border: none; padding: 15px 30px;
             border-radius: 12px; font-weight: 700; font-size: 1rem; cursor: pointer;
             width: 100%; margin-bottom: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            transition: all 0.3s;
         }
+        .fade-in { animation: fadeIn 0.6s ease-in-out; }
 
         .conclusion-wrapper {
             display: none; margin-top: 20px; background: linear-gradient(135deg, #fff0f0 0%, #ffeaa7 100%);
@@ -135,7 +142,7 @@
     <div id="map-background"></div>
 
     <div id="story-card-container">
-        <div class="glass-card animate__animated animate__zoomIn">
+        <div class="glass-card animate__animated animate__zoomIn" id="main-card-content">
             <div class="close-btn" onclick="closeCard()">&times;</div>
             <div id="chapter-title" class="chapter-title">Title</div>
 
@@ -155,7 +162,7 @@
                     <span class="verdict-emoji" id="conc-icon"></span>
                     <span class="verdict-label" id="conc-title"></span>
                 </div>
-                <button id="next-btn" class="action-btn" style="background:#6c5ce7;" onclick="nextStory()">Next Memory ➡️</button>
+                <button id="next-btn" class="action-btn" style="background:#6c5ce7;" onclick="handleNextClick()">Next Memory ➡️</button>
             </div>
         </div>
     </div>
@@ -181,7 +188,34 @@
             { chapter: "The Ladies' Man", location: "📍 IIT Patna", lat: 25.5358, lng: 84.8511, img: "Images/shreya.jpeg", fit: "cover", pos: "top center", text: "Our group spent days and night using this office space in the admin building, treating this as our party place, playing cards and ordering shakes and burgers from Batido, watching movies and having sleepovers. Courtesy of our TPC officer Shashwat Mahajan😂", author: "Shreya", narrative: "High prestige. High demand. And somehow, always surrounded by ladies. He is basically...", icon: "🎓", title: "Delhi University" },
             { chapter: "The Clarity", location: "📍 London, UK", lat: 51.5074, lng: -0.1278, img: "Images/disha.jpeg", fit: "cover", pos: "top center", text: "Instead of being younger, he felt like an older brother who cares for me a lot.", author: "Disha", narrative: "When there is drama or dirt on the windshield of life, one spray of Shashwat wipes it all away. No streaks left behind.", icon: "🧼", title: "Glass Cleaner" },
             { chapter: "The Reliable Ride", location: "📍 Santa Cruz, USA", lat: 36.9741, lng: -122.0308, img: "Images/yun.jpeg", fit: "cover", pos: "top center", text: "I love our Santa Cruz bonfire! Such a good memory.", author: "Yun", narrative: "High mileage friendship. Low maintenance. And an engine that never quits (just don't ask him to speed).", icon: "🚗", title: "A Toyota" },
-            { chapter: "The Ghost", location: "📍 Khada Danda", lat: 32.2190, lng: 76.3100, img: "Images/hrisabh.jpeg", video: "Images/hrisabh.mp4", text: "We have great memories on Khada Danda road, but trying to reach him afterwards is another story...", author: "Hrishab", narrative: "You speak to him, but he doesn't speak back until 3 months later. He effectively functions as a vintage...", icon: "📱", title: "Voicemail" },
+            
+            // --- HRISHABH (Dual Page) ---
+            { 
+                chapter: "The Ghost", 
+                location: "📍 Khada Danda", 
+                lat: 32.2190, lng: 76.3100, 
+                author: "Hrishab",
+                pages: [
+                    {
+                        chapter: "The Ghost",
+                        img: "Images/hrisabh.jpeg", 
+                        video: "Images/hrisabh.mp4",
+                        text: "We have great memories on Khada Danda road, but trying to reach him afterwards is another story...",
+                        narrative: "You speak to him, but he doesn't speak back until 3 months later. He effectively functions as a vintage...",
+                        icon: "📱",
+                        title: "Voicemail"
+                    },
+                    {
+                        chapter: "Part 2",
+                        img: "Images/nangu_shashu.jpeg", 
+                        text: "Hum bina kapde k hot h",
+                        narrative: "Continued...",
+                        icon: "🩳",
+                        title: "Nangu Pangu"
+                    }
+                ]
+            },
+
             { chapter: "The Spotlight", location: "📍 Kerala, India", lat: 9.9312, lng: 76.2673, img: "Images/saurabh.jpeg", fit: "contain", text: "Using a 'Nada' to tie his shorts... he unintentionally becomes the highlight of the trip.", author: "Sourabh", narrative: "Unlike sunflower that follows light, its him that light follows.", icon: "🌻", title: "Reverse Sunflower" },
             { chapter: "The Softie", location: "📍 Hallstatt, Austria", lat: 47.5622, lng: 13.6493, img: "Images/Ann.jpeg", fit: "contain", text: "Thanks for organising such a nice trip. It was smooth sailing.", author: "Ann", narrative: "He has no crunch, no hard shell, and no nuts (metaphorically). Just pure, soft sweetness.", icon: "🍫", title: "Milkyway Bar" },
             { chapter: "The Natural", location: "📍 Munich, Germany", lat: 48.1495, lng: 11.5780, img: "Images/nikita.jpeg", fit: "contain", text: "Munich: His house, his cooking, my appetite.", author: "Nikita", narrative: "He isn't neon or flashing lights. He is the color of grounding, cooking, and nature.", icon: "🌲", title: "Forest Green" },
@@ -193,14 +227,143 @@
             { chapter: "The Family", location: "📍 Nederlinger str", lat: 48.1650, lng: 11.5300, img: "Images/Akash.jpeg", fit: "contain", text: "I had just come to Munich and I found this lovely group of friends I called home. This picture is a testament to this emotion. At the same time its a bitter sweet emotion, as we do not / cannot have this again. In Shashwat, I found a friend who is always there for you when you need him (no questions asked, seriously!). Wish you a very happy birthday Shashwat!", author: "Akash", narrative: "Refreshing and sweet.", icon: "🍋", title: "Lemonade" },
             { chapter: "The Spark", location: "📍 IIT Patna Fest", lat: 25.5350, lng: 84.8520, img: "Images/Aryan.jpeg", fit: "contain", text: "This is from our first reverb ( college diwali fest )", author: "Aryan", narrative: "He lights up the night.", icon: "🎆", title: "Firecracker" },
             { chapter: "The Coder", location: "📍 IIT Roorkee", lat: 29.8649, lng: 77.8966, img: "Images/Joshika.jpeg", fit: "contain", text: "This Roorkee inter-IIT trip photo brings back so many memories of laughs, sleepless 24 hrs of CTF with us desperately trying to solve 2 problems😂, and good times that still make me smile. So grateful for you and for everything we've shared. Happy Birthday ❤️", author: "Joshika", narrative: "Logic, determination, and late nights.", icon: "💻", title: "Debugged Code" },
-            { chapter: "The Cool", location: "📍 IIT P Jungle", lat: 25.5320, lng: 84.8480, img: "Images/bhumika2.jpeg", fit: "contain", text: "IIT Patna restricted jungle area", author: "Bhumika", narrative: "If Shashwat were a state of water, he would be 'baraf wali icecream'", icon: "🍧", title: "Ice Cream" },
+            
+            // --- BHUMIKA (Dual Page) ---
+            { 
+                chapter: "The Cool", 
+                location: "📍 IIT P Jungle", 
+                lat: 25.5320, lng: 84.8480, 
+                author: "Bhumika",
+                pages: [
+                    {
+                        chapter: "The Cool",
+                        img: "Images/bhumika2.jpeg",
+                        fit: "contain",
+                        text: "IIT Patna restricted jungle area",
+                        narrative: "If Shashwat were a state of water, he would be 'baraf wali icecream'",
+                        icon: "🍧",
+                        title: "Ice Cream"
+                    },
+                    {
+                        chapter: "The Melody",
+                        img: "Images/bhumika.jpeg", 
+                        fit: "contain",
+                        text: "If shashwat were a song, he would be 'Par channa de'. If Shashwat were a notebook, he would be neatly labeled and color-coded (Chat gpt bataya 😂)",
+                        narrative: "Traditional yet organized.",
+                        icon: "🎶",
+                        title: "Par Channa De"
+                    }
+                ]
+            },
+
             { chapter: "The Director", location: "📍 Google BLR", lat: 12.9851, lng: 77.7019, img: "Images/Balbeer.jpeg", fit: "contain", text: "Always creating the best scenes and memories!", author: "Balbeer", narrative: "If he was a celebrity, he will definitely be Karan Johar", icon: "🎥", title: "Karan Johar" },
             { chapter: "The Agent", location: "📍 London Eye", lat: 51.5033, lng: -0.1195, img: "Images/AkhileshLihe.mp4", text: "Wishing you a fantastic year ahead from London!", author: "Akhilesh & Lihe", narrative: "Supportive agent listen first and response after", icon: "🤖", title: "AI Agent" },
             { chapter: "The Style", location: "📍 Marienplatz", lat: 48.1380, lng: 11.5760, img: "Images/Alex.jpeg", fit: "contain", text: "Here's to more food adventures and great style!", author: "Alexandra", narrative: "Ankle lenth shoes", icon: "👟", title: "Trendy Shoe" },
             { chapter: "The Alpinist", location: "📍 Switzerland", lat: 46.8182, lng: 8.2275, img: "Images/Dikshant.jpeg", fit: "contain", text: "Reaching new heights together!", author: "Dikshant", narrative: "pull up assistance band", icon: "💪", title: "Gym Equipment" },
-            { chapter: "The Saviour", location: "📍 Himachal", lat: 32.2432, lng: 77.1892, img: "Images/cooking_shashu.jpeg", fit: "contain", text: "Ye hamari ek memory h jab vo mere saath badag mai aaya tha hamari gas khatam ho gayi thi. To hamne turpentine oil stove par khana banaya tha. Exactly 1 year ago.Aur 90 percent khana issi ne banaya tha", author: "Sister", narrative: "Chef under pressure, literally.", icon: "🥘", title: "Master Chef" },
-            { chapter: "The Big Brother", location: "📍 IIT Patna", lat: 25.5357, lng: 84.8512, img: "Images/tarusi.mp4", fit: "contain", text: "And then jab hum college main the toh last last days main faculty quarters main swings hote the. Toh mujhe jaana hota tha swings lene but main humesha yeh bolti thi ki bhaiya ka man hai toh isliye jaare. And ismain bhi end main merese yehi pucha jaara hai ki maine kya padhayi kari 😩", author: "Tarusi", narrative: "A soft toy i think he will be a penguin because they are goofy, loving and there for each other", icon: "🐧", title: "Soft Toy" },
-            { chapter: "The Stylist", location: "📍 Train, Germany", lat: 49.4521, lng: 11.0767, img: "Images/aanchal.jpeg", fit: "contain", text: "One of my favorite memories with Shashwat is when we braided each other's hair. I gave him a french braid and I was amazed at how good it looked at him. I was also very glad that he liked it enough to keep it as is until the next day. He also learnt how to braid from me and practiced on my hair.", author: "Aanchal", narrative: "basil is a symbol of warmth and hospitality", icon: "🌿", title: "Basil" }
+            
+            // --- SISTER (4 Pages) ---
+            { 
+                chapter: "The Saviour", 
+                location: "📍 Himachal", 
+                lat: 32.2432, lng: 77.1892, 
+                author: "Sister",
+                pages: [
+                    {
+                        chapter: "The Turpentine Chef", 
+                        img: "Images/cooking_shashu.mp4",
+                        fit: "contain",
+                        text: "Ye hamari ek memory h jab vo mere saath badag mai aaya tha hamari gas khatam ho gayi thi. To hamne turpentine oil stove par khana banaya tha. Exactly 1 year ago. Aur 90 percent khana issi ne banaya tha",
+                        narrative: "Chef under pressure, literally.",
+                        icon: "🔥", 
+                        title: "Survival Cook"
+                    },
+                    {
+                        chapter: "The Rapunzel Phase", 
+                        img: "Images/happy_shashu.jpeg", 
+                        fit: "contain", 
+                        text: "Jab Uske Baal in process the badne ke", 
+                        narrative: "Trying to find his style...", 
+                        icon: "🦁", 
+                        title: "Lady Shashwat"
+                    },
+                    {
+                        chapter: "The Kadhai King", 
+                        img: "Images/shashwat_chotu.jpeg", 
+                        fit: "contain", 
+                        text: "Bache bachpan m khilono se khelte hai ye cooker kadhai aur karchhii se khelta tha", 
+                        narrative: "Destined to be a Halwai.", 
+                        icon: "🥄", 
+                        title: "Born Chef"
+                    },
+                    {
+                        chapter: "The Jimson Survivor", 
+                        img: "Images/dep_shashu.jpeg", 
+                        fit: "contain", 
+                        text: "Ye photo Maine tab kheenchi uski jab corona ka time tha aur aap sab ko ghar par hi assignments milti thi. Teen din se dhang se soya nahi tha. Kyunki aapka ek professor tha jimson. Vo sadist tha aur mushkil mushkil assignments", 
+                        narrative: "Powered by caffeine and trauma.", 
+                        icon: "🧟", 
+                        title: "Zombie Mode"
+                    }
+                ]
+            },
+
+            // --- TARUSI (Dual Page) ---
+            { 
+                chapter: "The Big Brother", 
+                location: "📍 IIT Patna", 
+                lat: 25.5357, lng: 84.8512, 
+                author: "Tarusi",
+                pages: [
+                    {
+                        chapter: "The Big Brother",
+                        img: "Images/tarusi.mp4",
+                        fit: "contain",
+                        text: "And then jab hum college main the toh last last days main faculty quarters main swings hote the. Toh mujhe jaana hota tha swings lene but main humesha yeh bolti thi ki bhaiya ka man hai toh isliye jaare. And ismain bhi end main merese yehi pucha jaara hai ki maine kya padhayi kari 😩",
+                        narrative: "A soft toy i think he will be a penguin because they are goofy, loving and there for each other",
+                        icon: "🐧",
+                        title: "Soft Toy"
+                    },
+                    {
+                        chapter: "The Mentor",
+                        img: "Images/tarusi_extra.jpeg",
+                        fit: "contain",
+                        text: "For me one is covid ke time main mostly call pe hi baat karte the. Toh kabhi bhi kuch bhi ho Sad houn happy houn toh he is always there and along with it evey conversation ka end will be ki maine leetcode pe kitne questions kiye 🫠. Yeh toh abhi bhi true hai",
+                        narrative: "Supportive... but strictly technical.",
+                        icon: "💻",
+                        title: "Leetcode"
+                    }
+                ]
+            },
+
+            { chapter: "The Stylist", location: "📍 Train, Germany", lat: 49.4521, lng: 11.0767, img: "Images/aanchal.jpeg", fit: "contain", text: "One of my favorite memories with Shashwat is when we braided each other's hair. I gave him a french braid and I was amazed at how good it looked at him. I was also very glad that he liked it enough to keep it as is until the next day. He also learnt how to braid from me and practiced on my hair.", author: "Aanchal", narrative: "basil is a symbol of warmth and hospitality", icon: "🌿", title: "Basil" },
+
+            // --- YUVI (Dual Page) ---
+            { 
+                chapter: "The Trainer", 
+                location: "📍 Debate Club", 
+                lat: 25.5365, lng: 84.8520, 
+                author: "Yuvi", 
+                pages: [
+                    {
+                        chapter: "The Trainer",
+                        img: "Images/yuvi_debate.jpg", 
+                        fit: "contain",
+                        text: "Us in debate: Shashwat explaining shit. Balbeer pretending he understands it. Me thinking* kya bakk rhe h dono",
+                        narrative: "If Shashwat was a pokemon character - he would be Brock - 100% attention only for girls.",
+                        icon: "😑",
+                        title: "Brock (Pokemon)"
+                    },
+                    {
+                        chapter: "The Flow",
+                        img: "Images/yuvi_river.jpg", 
+                        fit: "cover",
+                        text: "The rocks, carrying the soul of the great mountains it originated from, chattering with every little pebble, taking a break with the larger ones but not for too long, continuing down, uninterrupted, cleaning everything it touches, leaving behind a gentle fragrance that mingles with the wind and tells you - 'You are home'",
+                        narrative: "Like a river: Uninterrupted, cleansing, and feels like home.",
+                        icon: "🌊",
+                        title: "Mountain River"
+                    }
+                ]
+            }
         ];
 
         // --- MAP & MARKERS ---
@@ -208,11 +371,13 @@
         L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', { attribution: '', maxZoom: 19 }).addTo(map);
 
         let currentActiveIndex = 0;
+        let currentInternalPageIndex = 0; 
         let isAutoplay = false;
         let mapMarkers = []; 
 
         storyline.forEach((data, index) => {
-            const smallIcon = L.divIcon({ className: 'custom-pin', html: `<span>${data.icon}</span>`, iconSize: [42, 42], iconAnchor: [21, 21] });
+            const iconChar = data.pages ? data.pages[0].icon : data.icon;
+            const smallIcon = L.divIcon({ className: 'custom-pin', html: `<span>${iconChar}</span>`, iconSize: [42, 42], iconAnchor: [21, 21] });
             const marker = L.marker([data.lat, data.lng], {icon: smallIcon}).addTo(map);
             marker.bindTooltip(data.location, { direction: 'top', offset: [0, -10], className: 'location-label', permanent: false });
             marker.on('click', () => { if(!isAutoplay) { currentActiveIndex = index; openStory(index); } });
@@ -223,6 +388,7 @@
         let introIndex = 0;
         function initiateJourney(autoplayMode) {
             isAutoplay = autoplayMode;
+            // Show video intro in BOTH modes
             document.getElementById('start-overlay').style.display = 'none';
             document.getElementById('video-intro-overlay').style.display = 'flex';
             playNextIntroVideo();
@@ -245,42 +411,60 @@
         }
 
         // --- CORE LOGIC ---
-        function startManual() { openStory(0); }
+        function startManual() { 
+            // Manual Mode: Just show the world map (user can zoom in freely)
+            map.flyTo([30, 10], 3, { duration: 1.5 });
+        }
+
         function startAutoplay() {
             document.getElementById('reveal-btn').style.display = 'none';
             document.getElementById('next-btn').style.display = 'none';
             document.querySelector('.close-btn').style.display = 'none';
-            runAutoplaySequence(0);
+            runAutoplaySequence(0, 0); 
         }
 
-        function runAutoplaySequence(index) {
-            if(index >= storyline.length) { finishTour(); return; }
-            openStory(index);
+        function runAutoplaySequence(storyIndex, pageIndex) {
+            if(storyIndex >= storyline.length) { finishTour(); return; }
+            
+            if(pageIndex === 0) {
+                openStory(storyIndex);
+            } else {
+                currentInternalPageIndex = pageIndex;
+                loadPageContent(storyline[storyIndex].pages[pageIndex]);
+                document.querySelector('.glass-card').scrollTop = 0;
+            }
             
             setTimeout(() => {
                 const cardContainer = document.getElementById('story-card-container');
                 const card = document.querySelector('.glass-card');
                 const vid = document.getElementById('ev-video');
-                cardContainer.style.display = 'block'; card.scrollTop = 0;
+                cardContainer.style.display = 'block'; 
 
-                const currentStory = storyline[index];
-                const isVideo = currentStory.video || (currentStory.img && currentStory.img.endsWith('.mp4'));
+                let currentData = storyline[storyIndex];
+                if(currentData.pages) currentData = currentData.pages[pageIndex];
+
+                const isVideo = currentData.video || (currentData.img && currentData.img.endsWith('.mp4'));
 
                 function performScrollAndReveal() {
                     vid.onended = null;
                     card.scrollTo({ top: 350, behavior: 'smooth' });
 
-                    // SMART READING TIMER: (Word count * 250ms) with min 4s limit
-                    const wordCount = currentStory.text.split(" ").length;
+                    const wordCount = currentData.text.split(" ").length;
                     const readingTime = Math.max(4000, wordCount * 250);
 
                     setTimeout(() => {
                         revealConclusion();
                         setTimeout(() => {
-                            cardContainer.style.display = 'none';
-                            if(mapMarkers[index]) mapMarkers[index].closeTooltip();
-                            runAutoplaySequence(index + 1);
-                        }, 5000); // 5s to see the verdict/gift
+                            if(storyline[storyIndex].pages && pageIndex < storyline[storyIndex].pages.length - 1) {
+                                document.getElementById('conclusion-wrapper').style.display = 'none';
+                                runAutoplaySequence(storyIndex, pageIndex + 1);
+                            } else {
+                                cardContainer.style.display = 'none';
+                                if(mapMarkers[storyIndex]) mapMarkers[storyIndex].closeTooltip();
+                                document.getElementById('conclusion-wrapper').style.display = 'none';
+                                runAutoplaySequence(storyIndex + 1, 0);
+                            }
+                        }, 5000); 
                     }, readingTime);
                 }
 
@@ -315,28 +499,53 @@
         }
 
         function openStory(index) {
-            const data = storyline[index]; currentActiveIndex = index;
+            const data = storyline[index]; 
+            currentActiveIndex = index;
+            currentInternalPageIndex = 0; 
+
             document.getElementById('story-card-container').style.display = 'none';
-            map.flyTo([data.lat, data.lng], 10, { duration: 2.0 });
+            
+            // Smart Zoom Logic
+            let targetZoom = 11;
+            if (!isAutoplay) {
+                targetZoom = Math.max(map.getZoom(), 12);
+            }
+            map.flyTo([data.lat, data.lng], targetZoom, { duration: 2.0 });
+
             mapMarkers.forEach(m => m.closeTooltip());
             setTimeout(() => { if(mapMarkers[index]) mapMarkers[index].openTooltip(); }, 1000);
 
-            const revealBtn = document.getElementById('reveal-btn');
-            const nextBtn = document.getElementById('next-btn');
+            const displayData = data.pages ? data.pages[0] : data;
             
+            document.getElementById('ev-author').innerText = `— ${data.author}`;
+            loadPageContent(displayData);
+            updateButtonState(index, 0);
+
             if(!isAutoplay) {
-                revealBtn.style.display = 'block'; nextBtn.style.display = 'block';
-            } else {
-                revealBtn.style.display = 'none'; nextBtn.style.display = 'none';
+                setTimeout(() => {
+                    document.getElementById('story-card-container').style.display = 'block';
+                    document.querySelector('.glass-card').scrollTop = 0;
+                }, 3000); 
             }
-            
+        }
+
+        function loadPageContent(data) {
+            const cardContent = document.getElementById('main-card-content');
+            cardContent.classList.remove('animate__zoomIn');
+            cardContent.classList.remove('fade-in');
+            void cardContent.offsetWidth; 
+            cardContent.classList.add('fade-in');
+
             document.getElementById('conclusion-wrapper').style.display = 'none';
+            if(!isAutoplay) document.getElementById('reveal-btn').style.display = 'block';
+
             document.getElementById('chapter-title').innerText = data.chapter;
             document.getElementById('ev-text').innerText = `"${data.text}"`;
-            document.getElementById('ev-author').innerText = `— ${data.author}`;
             
-            const img = document.getElementById('ev-img'); const vid = document.getElementById('ev-video');
-            img.style.objectFit = data.fit || 'contain'; img.style.objectPosition = data.pos || 'center';
+            const img = document.getElementById('ev-img'); 
+            const vid = document.getElementById('ev-video');
+            img.style.objectFit = data.fit || 'contain'; 
+            img.style.objectPosition = data.pos || 'center';
 
             if(data.video || (data.img && data.img.endsWith('.mp4'))) {
                 img.style.display = 'none'; vid.style.display = 'block'; vid.src = data.video || data.img;
@@ -347,12 +556,47 @@
             document.getElementById('conc-narrative').innerText = data.narrative;
             document.getElementById('conc-icon').innerText = data.icon;
             document.getElementById('conc-title').innerText = data.title;
+        }
 
-            if(!isAutoplay) {
-                setTimeout(() => {
-                    document.getElementById('story-card-container').style.display = 'block';
-                    document.querySelector('.glass-card').scrollTop = 0;
-                }, 3000); 
+        function updateButtonState(storyIdx, pageIdx) {
+            const btn = document.getElementById('next-btn');
+            const data = storyline[storyIdx];
+            
+            // LOGIC FOR PAGES
+            if (data.pages && pageIdx < data.pages.length - 1) {
+                btn.innerText = "Next Page 📖";
+                btn.onclick = () => handleNextClick(); 
+            } else {
+                // LOGIC FOR END OF STORY
+                if(isAutoplay) {
+                    btn.innerText = "Next Memory ➡️";
+                    btn.onclick = () => handleNextClick();
+                } else {
+                    // MANUAL MODE SPECIFIC:
+                    // When story ends, show "Back to Map" to let user choose next pin
+                    btn.innerText = "Back to Map 🗺️";
+                    btn.onclick = () => closeToMap();
+                }
+            }
+        }
+
+        function closeToMap() {
+            document.getElementById('story-card-container').style.display = 'none';
+            if(mapMarkers[currentActiveIndex]) mapMarkers[currentActiveIndex].closeTooltip();
+            // Zoom back out to world view so they can pick the next pin
+            map.flyTo([30, 10], 3, { duration: 2.0 });
+        }
+
+        function handleNextClick() {
+            const data = storyline[currentActiveIndex];
+            
+            if (data.pages && currentInternalPageIndex < data.pages.length - 1) {
+                currentInternalPageIndex++;
+                loadPageContent(data.pages[currentInternalPageIndex]);
+                updateButtonState(currentActiveIndex, currentInternalPageIndex);
+                document.querySelector('.glass-card').scrollTop = 0;
+            } else {
+                nextStory();
             }
         }
 
@@ -361,6 +605,7 @@
             const wrapper = document.getElementById('conclusion-wrapper');
             wrapper.style.display = 'block';
             setTimeout(() => { document.querySelector('.glass-card').scrollTo({ top: document.querySelector('.glass-card').scrollHeight, behavior: 'smooth' }); }, 100);
+            
             var duration = 2 * 1000; var end = Date.now() + duration;
             (function frame() {
                 confetti({ particleCount: 5, angle: 60, spread: 55, origin: { x: 0 }, colors: ['#6c5ce7', '#fab1a0', '#ffeaa7'] });

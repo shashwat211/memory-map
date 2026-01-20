@@ -29,8 +29,32 @@
             gap: 20px;
         }
 
-        #end-overlay { display: none; }
+        #end-overlay, #video-intro-overlay { display: none; }
 
+        /* INTRO VIDEO PLAYER */
+        #video-intro-overlay {
+            background: #000; /* Cinema Mode */
+            z-index: 3000;
+        }
+        
+        #intro-video-element {
+            width: 100%; max-width: 800px; max-height: 80vh;
+            border-radius: 20px; box-shadow: 0 0 50px rgba(108, 92, 231, 0.3);
+        }
+
+        .intro-label {
+            color: white; font-family: 'Fredoka One'; font-size: 1.5rem; margin-top: 15px;
+            animation: fadeIn 1s;
+        }
+
+        .skip-btn {
+            position: absolute; top: 20px; right: 20px;
+            background: rgba(255,255,255,0.2); color: white;
+            border: 1px solid white; padding: 10px 20px; border-radius: 30px;
+            cursor: pointer; z-index: 3001; font-size: 0.9rem;
+        }
+
+        /* START SCREEN */
         .big-title {
             color: white; font-family: 'Fredoka One'; font-size: 2.5rem; 
             text-shadow: 0 5px 15px rgba(0,0,0,0.5); text-align: center;
@@ -92,8 +116,6 @@
             border: 4px solid white;
         }
         .evidence-media { width: 100%; height: 100%; display: block; }
-        
-        /* IMPORTANT for Mobile Video */
         video.evidence-media { object-fit: cover; }
 
         .quote-box {
@@ -128,10 +150,11 @@
         /* --- MAP PINS --- */
         .custom-pin {
             background: #fff; border: 3px solid #6c5ce7; border-radius: 50%;
-            text-align: center; font-size: 16px;
+            text-align: center; 
             box-shadow: 0 4px 10px rgba(0,0,0,0.3);
             display: flex !important; justify-content: center; align-items: center;
             transition: transform 0.2s;
+            font-size: 1.2rem; line-height: 1;
         }
         
         .location-label {
@@ -151,9 +174,16 @@
 
     <div id="start-overlay" class="overlay-screen">
         <h1 class="big-title">Shashwat's<br>World Tour 🌎</h1>
-        <button class="mode-btn" onclick="startManual()">🕹️ Manual Explore</button>
-        <button class="mode-btn secondary" onclick="startAutoplay()">🍿 Watch Movie</button>
-        <p style="color:rgba(255,255,255,0.7); margin-top:10px; font-size:0.9rem;">(Safe for Mobile)</p>
+        <button class="mode-btn" onclick="initiateJourney(false)">🕹️ Manual Explore</button>
+        <button class="mode-btn secondary" onclick="initiateJourney(true)">🍿 Watch Movie</button>
+        <p style="color:rgba(255,255,255,0.7); margin-top:10px; font-size:0.9rem;">(Turn on sound! 🔊)</p>
+    </div>
+
+    <div id="video-intro-overlay" class="overlay-screen">
+        <button class="skip-btn" onclick="endIntroSequence()">Skip Intro ⏩</button>
+        
+        <video id="intro-video-element" playsinline webkit-playsinline controls></video>
+        <div id="intro-text" class="intro-label"></div>
     </div>
 
     <div id="end-overlay" class="overlay-screen">
@@ -172,7 +202,6 @@
 
             <div class="media-box">
                 <img id="ev-img" class="evidence-media" src="" style="display:none;">
-                
                 <video id="ev-video" class="evidence-media" src="" controls playsinline webkit-playsinline style="display:none;"></video>
             </div>
             
@@ -196,6 +225,17 @@
     </div>
 
     <script>
+        // --- 0. OPENING VIDEOS CONFIG ---
+        const openingVideos = [
+            { src: "Images/birthday_song.mp4", label: "🎂 A special song from Sister..." },
+            { src: "Images/maa_papa.mp4", label: "❤️ Messages from Mom & Dad" },
+            { src: "Images/papa.mp4", label: "👨 Message from Father" },
+            { src: "Images/jiju.mp4", label: "Our own PCM" },
+            { src: "Images/watermelon.mp4", label: "Our watermelon" }
+
+            
+        ];
+
         // --- 1. DATASET ---
         const storyline = [
             {
@@ -294,7 +334,7 @@
                 lat: 9.9312, lng: 76.2673,
                 img: "Images/saurabh.jpeg", fit: "contain",
                 text: "Using a 'Nada' to tie his shorts... he unintentionally becomes the highlight of the trip.",
-                author: "Saurabh",
+                author: "Sourabh",
                 narrative: "Unlike sunflower that follows light, its him that light follows.",
                 icon: "🌻", title: "Reverse Sunflower"
             },
@@ -413,7 +453,7 @@
                 location: "📍 IIT Patna",
                 lat: 25.5340, lng: 84.8500,
                 img: "Images/Balbeer.jpeg", fit: "contain",
-                text: "some memory?",
+                text: "Always creating the best scenes and memories!",
                 author: "Balbeer",
                 narrative: "If he was a celebrity, he will definitely be Karan Johar",
                 icon: "🎥", title: "Karan Johar"
@@ -423,7 +463,7 @@
                 location: "📍 London Eye",
                 lat: 51.5033, lng: -0.1195,
                 img: "Images/AkhileshLihe.mp4",
-                text: "Birthday wishes",
+                text: "Wishing you a fantastic year ahead from London!",
                 author: "Akhilesh & Lihe",
                 narrative: "Supportive agent listen first and response after",
                 icon: "🤖", title: "AI Agent"
@@ -433,7 +473,7 @@
                 location: "📍 Marienplatz",
                 lat: 48.1380, lng: 11.5760,
                 img: "Images/Alex.jpeg", fit: "contain",
-                text: "Food memories",
+                text: "Here's to more food adventures and great style!",
                 author: "Alexandra",
                 narrative: "Ankle lenth shoes",
                 icon: "👟", title: "Trendy Shoe"
@@ -443,11 +483,42 @@
                 location: "📍 Switzerland",
                 lat: 46.8182, lng: 8.2275,
                 img: "Images/Dikshant.jpeg", fit: "contain",
-                text: "At top of the hill?",
+                text: "Reaching new heights together!",
                 author: "Dikshant",
                 narrative: "pull up assistance band",
                 icon: "💪", title: "Gym Equipment"
-            }
+            },
+           {
+                chapter: "The Saviour",
+                location: "📍 Himachal",
+                lat: 32.2432, lng: 77.1892,
+                img: "Images/cooking_shashu.jpeg", fit: "contain",
+                text: "Ye hamari ek memory h jab vo mere saath badag mai aaya tha hamari gas khatam ho gayi thi. To hamne turpentine oil stove par khana banaya tha. Exactly 1 year ago.Aur 90 percent khana issi ne banaya tha",
+                author: "Sister",
+                narrative: "Chef under pressure, literally.",
+                icon: "🥘", title: "Master Chef"
+            },
+            {
+                chapter: "The Big Brother",
+                location: "📍 IIT Patna",
+                lat: 25.5357, lng: 84.8512,
+                img: "Images/tarusi.mp4", fit: "contain",
+                text: "And then jab hum college main the toh last last days main faculty quarters main swings hote the. Toh mujhe jaana hota tha swings lene but main humesha yeh bolti thi ki bhaiya ka man hai toh isliye jaare. And ismain bhi end main merese yehi pucha jaara hai ki maine kya padhayi kari 😩",
+                author: "Tarusi",
+                narrative: "A soft toy i think he will be a penguin because they are goofy, loving and there for each other",
+                icon: "🐧", title: "Soft Toy"
+            },
+            {
+                chapter: "The Stylist",
+                location: "📍 Train, Germany",
+                lat: 49.4521, lng: 11.0767,
+                img: "Images/aanchal.jpeg", fit: "contain",
+                text: "One of my favorite memories with Shashwat is when we braided each other's hair. I gave him a french braid and I was amazed at how good it looked at him. I was also very glad that he liked it enough to keep it as is until the next day. He also learnt how to braid from me and practiced on my hair.",
+                author: "Aanchal",
+                narrative: "basil is a symbol of warmth and hospitality",
+                icon: "🌿", title: "Basil"
+            },
+        
         ];
 
         // --- 2. MAP & MARKERS ---
@@ -466,9 +537,9 @@
         storyline.forEach((data, index) => {
             const smallIcon = L.divIcon({
                 className: 'custom-pin',
-                html: `🎁`,
-                iconSize: [35, 35],
-                iconAnchor: [17, 17]
+                html: `<span>${data.icon}</span>`, 
+                iconSize: [42, 42],
+                iconAnchor: [21, 21]
             });
 
             const marker = L.marker([data.lat, data.lng], {icon: smallIcon}).addTo(map);
@@ -490,23 +561,68 @@
             mapMarkers.push(marker);
         });
 
-        // --- 3. MODES & CONTROLS ---
+        // --- 3. VIDEO INTRO LOGIC ---
         
-        function startManual() {
+        let introIndex = 0;
+
+        function initiateJourney(autoplayMode) {
+            isAutoplay = autoplayMode;
             document.getElementById('start-overlay').style.display = 'none';
-            isAutoplay = false;
+            document.getElementById('video-intro-overlay').style.display = 'flex';
+            
+            playNextIntroVideo();
+        }
+
+        function playNextIntroVideo() {
+            if(introIndex >= openingVideos.length) {
+                endIntroSequence();
+                return;
+            }
+
+            const videoData = openingVideos[introIndex];
+            const videoEl = document.getElementById('intro-video-element');
+            const textEl = document.getElementById('intro-text');
+
+            videoEl.src = videoData.src;
+            textEl.innerText = videoData.label;
+            
+            videoEl.play().catch(e => {
+                console.log("Auto-play prevented, waiting for interaction or skip");
+            });
+
+            videoEl.onended = () => {
+                introIndex++;
+                playNextIntroVideo();
+            };
+        }
+
+        function endIntroSequence() {
+            document.getElementById('video-intro-overlay').style.display = 'none';
+            document.getElementById('intro-video-element').pause(); // Stop if skipped
+            
+            // START THE MAP JOURNEY
+            if(isAutoplay) {
+                startAutoplay();
+            } else {
+                startManual();
+            }
+        }
+
+        // --- 4. MAP JOURNEY LOGIC ---
+
+        function startManual() {
+            // Manual mode: just reset index and let user click or we fly to first
+            // Optional: Fly to first location to help them start
+            openStory(0);
         }
 
         function startAutoplay() {
-            document.getElementById('start-overlay').style.display = 'none';
-            isAutoplay = true;
             document.getElementById('reveal-btn').style.display = 'none';
             document.getElementById('next-btn').style.display = 'none';
             document.querySelector('.close-btn').style.display = 'none';
             runAutoplaySequence(0);
         }
 
-        // --- 4. CINEMATIC AUTOPLAY SEQUENCE ---
         function runAutoplaySequence(index) {
             if(index >= storyline.length) {
                 finishTour(); 
@@ -525,74 +641,58 @@
                 cardContainer.style.display = 'block';
                 card.scrollTop = 0;
 
-                // Check if current story is a VIDEO
                 const currentStory = storyline[index];
                 const isVideo = currentStory.video || (currentStory.img && currentStory.img.endsWith('.mp4'));
 
                 if(isVideo) {
-                    // SAFETY NET FOR MOBILE
-                    // 1. Set fallback timer in case video refuses to play or end
                     const safetyTimer = setTimeout(() => {
-                        console.log("Video timeout safety triggered - moving on");
-                        performScrollAndReveal();
-                    }, 5000); // 5 Seconds max wait for video
+                        performScrollAndReveal(currentStory);
+                    }, 8000); 
 
-                    // 2. Attempt Play
                     vid.currentTime = 0;
                     var playPromise = vid.play();
 
                     if (playPromise !== undefined) {
                         playPromise.then(_ => {
-                            // Video started playing
-                            // Clear simple safety timer, use onended instead
                             clearTimeout(safetyTimer);
-                            
-                            // Re-add a longer safety timer (duration + 1s)
-                            const durationSafe = (vid.duration && !isNaN(vid.duration)) ? (vid.duration * 1000) + 1000 : 6000;
-                             const longTimer = setTimeout(() => {
-                                performScrollAndReveal();
+                            const durationSafe = (vid.duration && !isNaN(vid.duration)) ? (vid.duration * 1000) + 1000 : 8000;
+                            const longTimer = setTimeout(() => {
+                                performScrollAndReveal(currentStory);
                             }, durationSafe);
 
                             vid.onended = () => {
-                                clearTimeout(longTimer); // Clear safety if ended naturally
-                                performScrollAndReveal();
+                                clearTimeout(longTimer);
+                                performScrollAndReveal(currentStory);
                             };
                         })
                         .catch(error => {
-                            // Video blocked or failed -> Treat as image
-                            console.log("Autoplay blocked, treating as image");
                             clearTimeout(safetyTimer);
                             setTimeout(() => {
-                                performScrollAndReveal();
+                                performScrollAndReveal(currentStory);
                             }, 3000);
                         });
                     }
                 } else {
-                    // Image: Wait standard 3s
                     setTimeout(() => {
-                        performScrollAndReveal();
+                        performScrollAndReveal(currentStory);
                     }, 3000);
                 }
 
-                function performScrollAndReveal() {
-                    // Remove listener to prevent double triggers
+                function performScrollAndReveal(storyData) {
                     vid.onended = null; 
-                    
-                    // Step 3: Scroll to Text
                     card.scrollTo({ top: 350, behavior: 'smooth' });
 
-                    // Step 4: Wait 5s for reading -> Reveal Gift
+                    const wordCount = storyData.text.split(" ").length;
+                    const readingDelay = Math.max(5000, wordCount * 300);
+
                     setTimeout(() => {
                         revealConclusion();
-
-                        // Step 5: Wait 5s for digesting -> Next
                         setTimeout(() => {
                             cardContainer.style.display = 'none';
                             if(mapMarkers[index]) mapMarkers[index].closeTooltip();
                             runAutoplaySequence(index + 1);
                         }, 5000);
-
-                    }, 5000); 
+                    }, readingDelay); 
                 }
 
             }, 3500); 
@@ -622,8 +722,6 @@
                 if (Date.now() < end) requestAnimationFrame(frame);
             }());
         }
-
-        // --- 5. CORE FUNCTIONS ---
 
         function openStory(index) {
             const data = storyline[index];

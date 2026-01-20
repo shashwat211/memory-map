@@ -85,7 +85,7 @@
         }
         .author-tag {
             display: block; text-align: right; font-weight: 800; color: #fab1a0;
-            font-size: 0.85rem; text-transform: uppercase; margin-bottom: 20px;
+            font-size: 0.85rem; text-transform: uppercase; margin-bottom: 20px; transition: opacity 0.3s;
         }
 
         .action-btn {
@@ -154,7 +154,7 @@
             <div class="quote-box" id="ev-text"></div>
             <span class="author-tag" id="ev-author"></span>
 
-            <button id="reveal-btn" class="action-btn" onclick="revealConclusion()">🎁 Open Gift</button>
+            <button id="reveal-btn" class="action-btn" onclick="revealConclusion()">✨ Reveal Persona</button>
 
             <div id="conclusion-wrapper" class="conclusion-wrapper">
                 <p id="conc-narrative" style="font-weight: 600; color: #444; margin-bottom:15px; font-size:1.1rem; line-height:1.4;"></p>
@@ -189,7 +189,7 @@
             { chapter: "The Clarity", location: "📍 London, UK", lat: 51.5074, lng: -0.1278, img: "Images/disha.jpeg", fit: "cover", pos: "top center", text: "Instead of being younger, he felt like an older brother who cares for me a lot.", author: "Disha", narrative: "When there is drama or dirt on the windshield of life, one spray of Shashwat wipes it all away. No streaks left behind.", icon: "🧼", title: "Glass Cleaner" },
             { chapter: "The Reliable Ride", location: "📍 Santa Cruz, USA", lat: 36.9741, lng: -122.0308, img: "Images/yun.jpeg", fit: "cover", pos: "top center", text: "I love our Santa Cruz bonfire! Such a good memory.", author: "Yun", narrative: "High mileage friendship. Low maintenance. And an engine that never quits (just don't ask him to speed).", icon: "🚗", title: "A Toyota" },
             
-            // --- HRISHABH (Dual Page) ---
+            // --- HRISHABH ---
             { 
                 chapter: "The Ghost", 
                 location: "📍 Khada Danda", 
@@ -228,7 +228,7 @@
             { chapter: "The Spark", location: "📍 IIT Patna Fest", lat: 25.5350, lng: 84.8520, img: "Images/Aryan.jpeg", fit: "contain", text: "This is from our first reverb ( college diwali fest )", author: "Aryan", narrative: "He lights up the night.", icon: "🎆", title: "Firecracker" },
             { chapter: "The Coder", location: "📍 IIT Roorkee", lat: 29.8649, lng: 77.8966, img: "Images/Joshika.jpeg", fit: "contain", text: "This Roorkee inter-IIT trip photo brings back so many memories of laughs, sleepless 24 hrs of CTF with us desperately trying to solve 2 problems😂, and good times that still make me smile. So grateful for you and for everything we've shared. Happy Birthday ❤️", author: "Joshika", narrative: "Logic, determination, and late nights.", icon: "💻", title: "Debugged Code" },
             
-            // --- BHUMIKA (Dual Page) ---
+            // --- BHUMIKA ---
             { 
                 chapter: "The Cool", 
                 location: "📍 IIT P Jungle", 
@@ -261,7 +261,7 @@
             { chapter: "The Style", location: "📍 Marienplatz", lat: 48.1380, lng: 11.5760, img: "Images/Alex.jpeg", fit: "contain", text: "Here's to more food adventures and great style!", author: "Alexandra", narrative: "Ankle lenth shoes", icon: "👟", title: "Trendy Shoe" },
             { chapter: "The Alpinist", location: "📍 Switzerland", lat: 46.8182, lng: 8.2275, img: "Images/Dikshant.jpeg", fit: "contain", text: "Reaching new heights together!", author: "Dikshant", narrative: "pull up assistance band", icon: "💪", title: "Gym Equipment" },
             
-            // --- SISTER (4 Pages) ---
+            // --- SISTER ---
             { 
                 chapter: "The Saviour", 
                 location: "📍 Himachal", 
@@ -307,7 +307,7 @@
                 ]
             },
 
-            // --- TARUSI (Dual Page) ---
+            // --- TARUSI ---
             { 
                 chapter: "The Big Brother", 
                 location: "📍 IIT Patna", 
@@ -337,7 +337,7 @@
 
             { chapter: "The Stylist", location: "📍 Train, Germany", lat: 49.4521, lng: 11.0767, img: "Images/aanchal.jpeg", fit: "contain", text: "One of my favorite memories with Shashwat is when we braided each other's hair. I gave him a french braid and I was amazed at how good it looked at him. I was also very glad that he liked it enough to keep it as is until the next day. He also learnt how to braid from me and practiced on my hair.", author: "Aanchal", narrative: "basil is a symbol of warmth and hospitality", icon: "🌿", title: "Basil" },
 
-            // --- YUVI (Dual Page) ---
+            // --- YUVI ---
             { 
                 chapter: "The Trainer", 
                 location: "📍 Debate Club", 
@@ -361,6 +361,71 @@
                         narrative: "Like a river: Uninterrupted, cleansing, and feels like home.",
                         icon: "🌊",
                         title: "Mountain River"
+                    }
+                ]
+            },
+
+            // --- MONIKA (UPDATED: 2 Pages) ---
+            { 
+                chapter: "The Vibe", 
+                location: "📍 Isar, Munich", 
+                lat: 48.1299, lng: 11.5834, 
+                author: "Monika", 
+                pages: [
+                    {
+                        chapter: "The New Year",
+                        img: "Images/comfort.jpeg", // PLACEHOLDER
+                        fit: "cover",
+                        text: "My favourite memory with you is the recent New Year one. Where we walked along the Isar, sang songs together, had sushi and miso soup. It was wholesome. I can still feel that moment and wanna live it again and again.",
+                        narrative: "Ye mausam, ye hawa, ye Nadi ka kinara...",
+                        icon: "🍜", 
+                        title: "Sushi & Songs"
+                    },
+                    {
+                        chapter: "The Shield",
+                        img: "Images/shashu.jpeg", // PLACEHOLDER
+                        fit: "contain",
+                        text: "If he were an umbrella, he would be one who can protect you from wind, sun, and rain. And at the same time a transparent umbrella which could let you see the situation clearly still being the shield of your life ❤️🥺",
+                        narrative: "Transparent, protective, and reliable.",
+                        icon: "☂️",
+                        title: "Transparent Umbrella"
+                    }
+                ]
+            },
+
+            // --- FAMILY (New - Chandigarh) ---
+            { 
+                chapter: "The Roots", 
+                location: "📍 Chandigarh", 
+                lat: 30.7333, lng: 76.7794, 
+                author: "Family",
+                pages: [
+                    {
+                        chapter: "Maa's Love",
+                        img: "Images/maa.jpeg", // PLACEHOLDER
+                        fit: "contain",
+                        text: "Maa ka pyaar aur haath ka khana, nothing in the world can beat that comfort. Always feeding us with love and warmth.",
+                        narrative: "Pure unconditional love.",
+                        icon: "🍛",
+                        title: "Annapurna"
+                    },
+                    {
+                        chapter: "Papa's Guidance",
+                        img: "Images/papa.jpeg", // PLACEHOLDER
+                        fit: "contain",
+                        text: "Always standing tall, guiding us silently with strength and wisdom. The backbone of our home.",
+                        narrative: "The silent strength.",
+                        icon: "🦁",
+                        title: "The Lion King"
+                    },
+                    {
+                        chapter: "Jiju's Wisdom",
+                        img: "Images/jiju.jpeg", // PLACEHOLDER
+                        fit: "contain",
+                        text: "Adding the perfect mix of fun, logic, and advice to our lives. The coolest addition to the squad!",
+                        narrative: "Strategist and fun-maker.",
+                        icon: "🕶️",
+                        title: "Cool Dude"
                     }
                 ]
             }
@@ -388,7 +453,6 @@
         let introIndex = 0;
         function initiateJourney(autoplayMode) {
             isAutoplay = autoplayMode;
-            // Show video intro in BOTH modes
             document.getElementById('start-overlay').style.display = 'none';
             document.getElementById('video-intro-overlay').style.display = 'flex';
             playNextIntroVideo();
@@ -412,7 +476,6 @@
 
         // --- CORE LOGIC ---
         function startManual() { 
-            // Manual Mode: Just show the world map (user can zoom in freely)
             map.flyTo([30, 10], 3, { duration: 1.5 });
         }
 
@@ -430,7 +493,7 @@
                 openStory(storyIndex);
             } else {
                 currentInternalPageIndex = pageIndex;
-                loadPageContent(storyline[storyIndex].pages[pageIndex]);
+                loadPageContent(storyline[storyIndex].pages[pageIndex], false);
                 document.querySelector('.glass-card').scrollTop = 0;
             }
             
@@ -518,7 +581,7 @@
             const displayData = data.pages ? data.pages[0] : data;
             
             document.getElementById('ev-author').innerText = `— ${data.author}`;
-            loadPageContent(displayData);
+            loadPageContent(displayData, true); // true = first page
             updateButtonState(index, 0);
 
             if(!isAutoplay) {
@@ -529,7 +592,7 @@
             }
         }
 
-        function loadPageContent(data) {
+        function loadPageContent(data, isFirstPage) {
             const cardContent = document.getElementById('main-card-content');
             cardContent.classList.remove('animate__zoomIn');
             cardContent.classList.remove('fade-in');
@@ -538,6 +601,9 @@
 
             document.getElementById('conclusion-wrapper').style.display = 'none';
             if(!isAutoplay) document.getElementById('reveal-btn').style.display = 'block';
+
+            // Show author only on first page
+            document.getElementById('ev-author').style.display = isFirstPage ? 'block' : 'none';
 
             document.getElementById('chapter-title').innerText = data.chapter;
             document.getElementById('ev-text').innerText = `"${data.text}"`;
@@ -562,18 +628,14 @@
             const btn = document.getElementById('next-btn');
             const data = storyline[storyIdx];
             
-            // LOGIC FOR PAGES
             if (data.pages && pageIdx < data.pages.length - 1) {
                 btn.innerText = "Next Page 📖";
                 btn.onclick = () => handleNextClick(); 
             } else {
-                // LOGIC FOR END OF STORY
                 if(isAutoplay) {
                     btn.innerText = "Next Memory ➡️";
                     btn.onclick = () => handleNextClick();
                 } else {
-                    // MANUAL MODE SPECIFIC:
-                    // When story ends, show "Back to Map" to let user choose next pin
                     btn.innerText = "Back to Map 🗺️";
                     btn.onclick = () => closeToMap();
                 }
@@ -583,7 +645,6 @@
         function closeToMap() {
             document.getElementById('story-card-container').style.display = 'none';
             if(mapMarkers[currentActiveIndex]) mapMarkers[currentActiveIndex].closeTooltip();
-            // Zoom back out to world view so they can pick the next pin
             map.flyTo([30, 10], 3, { duration: 2.0 });
         }
 
@@ -592,7 +653,7 @@
             
             if (data.pages && currentInternalPageIndex < data.pages.length - 1) {
                 currentInternalPageIndex++;
-                loadPageContent(data.pages[currentInternalPageIndex]);
+                loadPageContent(data.pages[currentInternalPageIndex], false); // false = not first page
                 updateButtonState(currentActiveIndex, currentInternalPageIndex);
                 document.querySelector('.glass-card').scrollTop = 0;
             } else {

@@ -3,7 +3,7 @@
 <head>
     <title>Shashwat's World Tour 🌎</title>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
@@ -19,21 +19,29 @@
         
         #map-background { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: 1; }
 
-        /* --- START SCREEN --- */
-        #start-overlay {
+        /* --- OVERLAYS --- */
+        .overlay-screen {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.8); 
+            background: rgba(0,0,0,0.85); 
             backdrop-filter: blur(10px);
             z-index: 2000;
             display: flex; flex-direction: column; justify-content: center; align-items: center;
             gap: 20px;
         }
 
+        #end-overlay { display: none; }
+
+        .big-title {
+            color: white; font-family: 'Fredoka One'; font-size: 2.5rem; 
+            text-shadow: 0 5px 15px rgba(0,0,0,0.5); text-align: center;
+            line-height: 1.2; padding: 0 10px;
+        }
+
         .mode-btn {
             background: linear-gradient(135deg, #6c5ce7, #a29bfe);
-            color: white; padding: 20px 40px; border-radius: 50px;
-            font-family: 'Fredoka One', cursive; font-size: 1.5rem;
-            border: none; cursor: pointer; width: 320px;
+            color: white; padding: 18px 30px; border-radius: 50px;
+            font-family: 'Fredoka One', cursive; font-size: 1.2rem;
+            border: none; cursor: pointer; width: 85%; max-width: 320px;
             box-shadow: 0 10px 25px rgba(108, 92, 231, 0.5);
             transition: transform 0.2s;
         }
@@ -44,7 +52,7 @@
         #story-card-container {
             position: fixed; top: 50%; left: 50%;
             transform: translate(-50%, -50%);
-            width: 90%; max-width: 480px;
+            width: 90%; max-width: 450px;
             z-index: 1000;
             display: none; 
         }
@@ -52,11 +60,11 @@
         .glass-card {
             background: rgba(255, 255, 255, 0.98);
             border-radius: 24px;
-            padding: 25px;
+            padding: 20px;
             box-shadow: 0 20px 60px rgba(0,0,0,0.6);
             border: 2px solid rgba(255,255,255,1);
             text-align: center;
-            max-height: 85vh; 
+            max-height: 80vh; 
             overflow-y: auto;
             position: relative;
             scroll-behavior: smooth; 
@@ -68,16 +76,15 @@
             font-size: 1.8rem; color: #b2bec3; cursor: pointer;
             z-index: 10;
         }
-        .close-btn:hover { color: #d63031; }
 
         .chapter-title {
             font-family: 'Fredoka One', cursive; color: #6c5ce7;
-            font-size: 1.5rem; margin-bottom: 15px; text-transform: uppercase;
+            font-size: 1.4rem; margin-bottom: 15px; text-transform: uppercase;
         }
 
-        /* --- PHOTO/VIDEO CONTAINER --- */
+        /* --- MEDIA BOX --- */
         .media-box {
-            width: 100%; height: 320px; 
+            width: 100%; height: 280px; 
             background: #fff; border-radius: 18px;
             overflow: hidden; margin-bottom: 20px;
             display: flex; align-items: center; justify-content: center;
@@ -86,39 +93,37 @@
         }
         .evidence-media { width: 100%; height: 100%; display: block; }
         
-        /* Ensure video fills space nicely */
+        /* IMPORTANT for Mobile Video */
         video.evidence-media { object-fit: cover; }
 
         .quote-box {
-            background: #f4f7f6; padding: 20px; border-radius: 15px;
-            font-size: 1rem; color: #2d3436; font-style: italic; line-height: 1.6;
+            background: #f4f7f6; padding: 15px; border-radius: 15px;
+            font-size: 0.95rem; color: #2d3436; font-style: italic; line-height: 1.6;
             border-left: 5px solid #fab1a0; margin-bottom: 10px; text-align: left; 
         }
         
         .author-tag {
             display: block; text-align: right; font-weight: 800; 
-            color: #fab1a0; font-size: 0.9rem; text-transform: uppercase; 
+            color: #fab1a0; font-size: 0.85rem; text-transform: uppercase; 
             margin-bottom: 20px; letter-spacing: 1px;
         }
 
         .action-btn {
             background: #2d3436; color: white; border: none;
             padding: 15px 30px; border-radius: 12px;
-            font-weight: 700; font-size: 1.1rem; cursor: pointer;
+            font-weight: 700; font-size: 1rem; cursor: pointer;
             width: 100%; margin-bottom: 10px;
             box-shadow: 0 4px 15px rgba(0,0,0,0.2);
         }
-        .action-btn:hover { background: #000; transform: translateY(-2px); }
 
-        /* CONCLUSION AREA */
         .conclusion-wrapper {
             display: none; margin-top: 20px;
             background: linear-gradient(135deg, #fff0f0 0%, #ffeaa7 100%);
-            padding: 25px; border-radius: 20px;
+            padding: 20px; border-radius: 20px;
             animation: fadeIn 0.8s;
         }
         .verdict-emoji { font-size: 3rem; display: block; margin-bottom: 5px; }
-        .verdict-label { font-family: 'Fredoka One'; color: #6c5ce7; font-size: 1.4rem; }
+        .verdict-label { font-family: 'Fredoka One'; color: #6c5ce7; font-size: 1.3rem; }
 
         /* --- MAP PINS --- */
         .custom-pin {
@@ -128,12 +133,11 @@
             display: flex !important; justify-content: center; align-items: center;
             transition: transform 0.2s;
         }
-        .custom-pin:hover { transform: scale(1.3); z-index: 999 !important; border-color: #fab1a0; }
-
+        
         .location-label {
             background: rgba(255, 255, 255, 0.95);
             border: 2px solid #6c5ce7; color: #2d3436;
-            font-family: 'Fredoka One', cursive; font-size: 14px;
+            font-family: 'Fredoka One', cursive; font-size: 13px;
             padding: 8px 15px; border-radius: 20px;
             box-shadow: 0 4px 15px rgba(0,0,0,0.2);
             white-space: nowrap;
@@ -145,11 +149,17 @@
 </head>
 <body>
 
-    <div id="start-overlay">
-        <h1 style="color:white; font-family:'Fredoka One'; font-size:3rem; text-shadow:0 5px 10px rgba(0,0,0,0.5); text-align:center;">Shashwat's<br>World Tour 🌎</h1>
+    <div id="start-overlay" class="overlay-screen">
+        <h1 class="big-title">Shashwat's<br>World Tour 🌎</h1>
         <button class="mode-btn" onclick="startManual()">🕹️ Manual Explore</button>
         <button class="mode-btn secondary" onclick="startAutoplay()">🍿 Watch Movie</button>
-        <p style="color:rgba(255,255,255,0.7); margin-top:10px;">(Includes Smart Video Playback)</p>
+        <p style="color:rgba(255,255,255,0.7); margin-top:10px; font-size:0.9rem;">(Safe for Mobile)</p>
+    </div>
+
+    <div id="end-overlay" class="overlay-screen">
+        <h1 class="big-title" style="color:#fdcb6e;">Happy Birthday<br>Shashwat! 🎂</h1>
+        <div style="font-size: 4rem; animation: bounce 2s infinite;">🎁</div>
+        <button class="mode-btn" onclick="location.reload()">🔄 Replay Journey</button>
     </div>
 
     <div id="map-background"></div>
@@ -162,7 +172,8 @@
 
             <div class="media-box">
                 <img id="ev-img" class="evidence-media" src="" style="display:none;">
-                <video id="ev-video" class="evidence-media" src="" controls style="display:none;"></video>
+                
+                <video id="ev-video" class="evidence-media" src="" controls playsinline webkit-playsinline style="display:none;"></video>
             </div>
             
             <div class="quote-box" id="ev-text"></div>
@@ -391,7 +402,7 @@
                 chapter: "The Cool",
                 location: "📍 IIT P Jungle",
                 lat: 25.5320, lng: 84.8480,
-                img: "Images/bhumika2.jpeg", fit: "contain",
+                img: "Images/bhumika.jpeg", fit: "contain",
                 text: "IIT Patna restricted jungle area",
                 author: "Bhumika",
                 narrative: "If Shashwat were a state of water, he would be 'baraf wali icecream'",
@@ -412,7 +423,7 @@
                 location: "📍 London Eye",
                 lat: 51.5033, lng: -0.1195,
                 img: "Images/AkhileshLihe.mp4",
-                text: "Birthday wishes",
+                text: "some memory?",
                 author: "Akhilesh & Lihe",
                 narrative: "Supportive agent listen first and response after",
                 icon: "🤖", title: "AI Agent"
@@ -422,7 +433,7 @@
                 location: "📍 Marienplatz",
                 lat: 48.1380, lng: 11.5760,
                 img: "Images/Alex.jpeg", fit: "contain",
-                text: "Food memories",
+                text: "some memory?",
                 author: "Alexandra",
                 narrative: "Ankle lenth shoes",
                 icon: "👟", title: "Trendy Shoe"
@@ -498,7 +509,7 @@
         // --- 4. CINEMATIC AUTOPLAY SEQUENCE ---
         function runAutoplaySequence(index) {
             if(index >= storyline.length) {
-                setTimeout(() => runAutoplaySequence(0), 5000); 
+                finishTour(); 
                 return;
             }
 
@@ -519,18 +530,43 @@
                 const isVideo = currentStory.video || (currentStory.img && currentStory.img.endsWith('.mp4'));
 
                 if(isVideo) {
-                    // Play Video and wait for 'ended' event
+                    // SAFETY NET FOR MOBILE
+                    // 1. Set fallback timer in case video refuses to play or end
+                    const safetyTimer = setTimeout(() => {
+                        console.log("Video timeout safety triggered - moving on");
+                        performScrollAndReveal();
+                    }, 5000); // 5 Seconds max wait for video
+
+                    // 2. Attempt Play
                     vid.currentTime = 0;
-                    vid.play();
-                    
-                    // Fallback in case video doesn't play or is 0s
-                    let hasEnded = false;
-                    vid.onended = () => {
-                        if(!hasEnded) {
-                            hasEnded = true;
-                            performScrollAndReveal();
-                        }
-                    };
+                    var playPromise = vid.play();
+
+                    if (playPromise !== undefined) {
+                        playPromise.then(_ => {
+                            // Video started playing
+                            // Clear simple safety timer, use onended instead
+                            clearTimeout(safetyTimer);
+                            
+                            // Re-add a longer safety timer (duration + 1s)
+                            const durationSafe = (vid.duration && !isNaN(vid.duration)) ? (vid.duration * 1000) + 1000 : 6000;
+                             const longTimer = setTimeout(() => {
+                                performScrollAndReveal();
+                            }, durationSafe);
+
+                            vid.onended = () => {
+                                clearTimeout(longTimer); // Clear safety if ended naturally
+                                performScrollAndReveal();
+                            };
+                        })
+                        .catch(error => {
+                            // Video blocked or failed -> Treat as image
+                            console.log("Autoplay blocked, treating as image");
+                            clearTimeout(safetyTimer);
+                            setTimeout(() => {
+                                performScrollAndReveal();
+                            }, 3000);
+                        });
+                    }
                 } else {
                     // Image: Wait standard 3s
                     setTimeout(() => {
@@ -539,6 +575,9 @@
                 }
 
                 function performScrollAndReveal() {
+                    // Remove listener to prevent double triggers
+                    vid.onended = null; 
+                    
                     // Step 3: Scroll to Text
                     card.scrollTo({ top: 350, behavior: 'smooth' });
 
@@ -549,7 +588,7 @@
                         // Step 5: Wait 5s for digesting -> Next
                         setTimeout(() => {
                             cardContainer.style.display = 'none';
-                            mapMarkers[index].closeTooltip();
+                            if(mapMarkers[index]) mapMarkers[index].closeTooltip();
                             runAutoplaySequence(index + 1);
                         }, 5000);
 
@@ -557,6 +596,31 @@
                 }
 
             }, 3500); 
+        }
+
+        function finishTour() {
+            document.getElementById('story-card-container').style.display = 'none';
+            const endOverlay = document.getElementById('end-overlay');
+            endOverlay.style.display = 'flex';
+            endOverlay.classList.add('animate__animated', 'animate__fadeIn');
+            map.flyTo([30, 10], 2, { duration: 3 });
+
+            var duration = 5 * 1000;
+            var end = Date.now() + duration;
+
+            (function frame() {
+                confetti({
+                    particleCount: 5,
+                    angle: 60, spread: 55, origin: { x: 0 },
+                    colors: ['#6c5ce7', '#fab1a0', '#ffeaa7', '#fdcb6e']
+                });
+                confetti({
+                    particleCount: 5,
+                    angle: 120, spread: 55, origin: { x: 1 },
+                    colors: ['#6c5ce7', '#fab1a0', '#ffeaa7', '#fdcb6e']
+                });
+                if (Date.now() < end) requestAnimationFrame(frame);
+            }());
         }
 
         // --- 5. CORE FUNCTIONS ---
@@ -569,7 +633,7 @@
 
             mapMarkers.forEach(m => m.closeTooltip());
             setTimeout(() => {
-                mapMarkers[index].openTooltip();
+                if(mapMarkers[index]) mapMarkers[index].openTooltip();
             }, 1000);
 
             const revealBtn = document.getElementById('reveal-btn');
@@ -635,18 +699,19 @@
         }
 
         function nextStory() {
-            mapMarkers[currentActiveIndex].closeTooltip();
+            if(mapMarkers[currentActiveIndex]) mapMarkers[currentActiveIndex].closeTooltip();
+            
             let nextIndex = currentActiveIndex + 1;
             if(nextIndex >= storyline.length) {
-                alert("You've reached the end! 🎂");
-                nextIndex = 0;
+                finishTour(); 
+                return;
             }
             openStory(nextIndex);
         }
 
         function closeCard() {
             document.getElementById('story-card-container').style.display = 'none';
-            mapMarkers[currentActiveIndex].closeTooltip();
+            if(mapMarkers[currentActiveIndex]) mapMarkers[currentActiveIndex].closeTooltip();
         }
 
     </script>
